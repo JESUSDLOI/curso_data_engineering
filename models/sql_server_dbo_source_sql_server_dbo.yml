@@ -58,3 +58,46 @@ sources:
           - name: user_id
           - name: _fivetran_deleted
           - name: _fivetran_synced
+
+      - name: order_items
+        loaded_at_field: _fivetran_synced
+        columns:
+          - name: order_id
+          - name: product_id
+          - name: quantity
+          - name: _fivetran_deleted
+          - name: _fivetran_synced
+
+      - name: products
+        loaded_at_field: _fivetran_synced
+        columns:
+          - name: inventory
+          - name: product_id
+          - name: name
+          - name: price
+          - name: _fivetran_deleted
+          - name: _fivetran_synced
+
+      - name: promos
+        loaded_at_field: _fivetran_synced
+        columns:
+          - name: promo_id
+          - name: discount
+          - name: status
+          - name: _fivetran_deleted
+          - name: _fivetran_synced
+
+      - name: users
+        loaded_at_field: _fivetran_synced
+        columns:
+          - name: address_id
+          - name: created_at
+          - name: email
+          - name: first_name
+          - name: last_name
+          - name: phone_number
+          - name: total_orders
+          - name: updated_at
+          - name: user_id
+          - name: _fivetran_deleted
+          - name: _fivetran_synced
