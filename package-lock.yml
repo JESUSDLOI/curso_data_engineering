@@ -1,0 +1,8 @@
+packages:
+  - package: calogica/dbt_expectations
+    version: 0.1.2
+  - git: https://github.com/calogica/dbt-date.git
+    revision: 5f24102cde7f163ca0548bd5da5473ac186c036c
+  - package: fishtown-analytics/dbt_utils
+    version: 0.6.6
+sha1_hash: 0b4c0a8e7760f74718217062b6626a6bd2e62a57
