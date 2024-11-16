@@ -16,7 +16,6 @@ renamed as (
         trim(last_name) as last_name,
         convert_timezone('UTC', created_at) as created_at,
         trim(phone_number) as phone_number,
-        total_orders,
         trim(first_name) as first_name,
         email,
         _fivetran_deleted as valid_data,
