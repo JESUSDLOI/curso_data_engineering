@@ -50,3 +50,6 @@ seeds:
         +materialized: view
       marts:
         +materialized: table
+
+vars:
+  'dbt_date:time_zone': 'Europe/Madrid'
