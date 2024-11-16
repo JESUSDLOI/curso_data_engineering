@@ -13,8 +13,8 @@ renamed as (
         promo_id as promo_name,
         discount,
         status,
-        _fivetran_deleted,
-        _fivetran_synced at date_load
+        _fivetran_deleted as valid_data,
+        convert_timezone('UTC', _fivetran_synced) as date_load_UTC
 
     from source
 
