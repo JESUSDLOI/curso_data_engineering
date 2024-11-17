@@ -19,7 +19,15 @@ sources:
         loaded_at_field: _fivetran_synced
         columns:
           - name: address_id
+            tests:
+              - relationships:
+                  to: "source('sql_server_db','addresses')"
+                  field: address_id
+
           - name: created_at
+            tests:
+              - not_null
+                  
           - name: delivered_at
           - name: estimated_delivered_at
           - name: order_cost
@@ -33,17 +41,47 @@ sources:
           - name: user_id
           - name: _fivetran_deleted
           - name: _fivetran_synced
+            tests:
+            - dbt_utils.expression_is_true:
+                expression: "_fivetran_synced > (created_at or delivered_at)"
+
 
       - name: addresses
         loaded_at_field: _fivetran_synced
         columns:
+
           - name: address
+            tests:
+             - unique
+             - not_null
+                  
           - name: address_id
+            tests:
+              - unique
+              - not_null
+              - dbt_expectations.expect_column_value_lengths_to_equal:
+                  value: 36
+
           - name: country
+            tests:    
+              - dbt_utils.expression_is_true:
+                    expression: "{{ validate_country('country') }}"
+
           - name: state
+            tests:
+            - dbt_expectations.expect_column_value_lengths_to_be_between:
+                min_value: 4
+                max_value: 20
+                row_condition: '"STATE" is not null'
+
           - name: zipcode
+            tests:
+            - dbt_utils.expression_is_true:
+                expression: "{{ validate_us_zipcode('zipcode') }}"
+              
           - name: _fivetran_deleted
           - name: _fivetran_synced
+
 
       - name: events
         loaded_at_field: _fivetran_synced
