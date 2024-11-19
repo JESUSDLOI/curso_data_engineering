@@ -1,0 +1,78 @@
+version: 2
+
+models:
+  - name: stg_core__time
+    description: "Modelo de tiempo con distintas propiedades de fechas"
+    columns:
+      - name: date_day
+        description: "Fecha del día"
+      - name: prior_date_day
+        description: "Fecha del día anterior"
+      - name: next_date_day
+        description: "Fecha del siguiente día"
+      - name: prior_year_date_day
+        description: "Fecha correspondiente al mismo día del año anterior"
+      - name: prior_year_over_year_date_day
+        description: "Fecha correspondiente al mismo día del año anterior menos 364 días"
+      - name: day_of_week
+        description: "Número del día de la semana (1=lunes, 7=domingo)"
+      - name: day_of_week_iso
+        description: "Número del día de la semana en formato ISO (1=lunes, 7=domingo)"
+      - name: day_of_week_name
+        description: "Nombre completo del día de la semana"
+      - name: day_of_week_name_short
+        description: "Nombre corto del día de la semana"
+      - name: day_of_month
+        description: "Número del día en el mes"
+      - name: day_of_year
+        description: "Número del día en el año"
+      - name: week_start_date
+        description: "Fecha de inicio de la semana"
+      - name: week_end_date
+        description: "Fecha de fin de la semana"
+      - name: prior_year_week_start_date
+        description: "Fecha de inicio de la semana correspondiente al año anterior"
+      - name: prior_year_week_end_date
+        description: "Fecha de fin de la semana correspondiente al año anterior"
+      - name: week_of_year
+        description: "Número de la semana en el año"
+      - name: iso_week_start_date
+        description: "Fecha de inicio de la semana en formato ISO"
+      - name: iso_week_end_date
+        description: "Fecha de fin de la semana en formato ISO"
+      - name: prior_year_iso_week_start_date
+        description: "Fecha de inicio de la semana en formato ISO del año anterior"
+      - name: prior_year_iso_week_end_date
+        description: "Fecha de fin de la semana en formato ISO del año anterior"
+      - name: iso_week_of_year
+        description: "Número de la semana en el año en formato ISO"
+      - name: prior_year_week_of_year
+        description: "Número de la semana en el año anterior"
+      - name: prior_year_iso_week_of_year
+        description: "Número de la semana en el año anterior en formato ISO"
+      - name: month_of_year
+        description: "Número del mes en el año"
+      - name: month_name
+        description: "Nombre completo del mes"
+      - name: month_name_short
+        description: "Nombre corto del mes"
+      - name: month_start_date
+        description: "Fecha de inicio del mes"
+      - name: month_end_date
+        description: "Fecha de fin del mes"
+      - name: prior_year_month_start_date
+        description: "Fecha de inicio del mes correspondiente al año anterior"
+      - name: prior_year_month_end_date
+        description: "Fecha de fin del mes correspondiente al año anterior"
+      - name: quarter_of_year
+        description: "Número del trimestre en el año"
+      - name: quarter_start_date
+        description: "Fecha de inicio del trimestre"
+      - name: quarter_end_date
+        description: "Fecha de fin del trimestre"
+      - name: year_number
+        description: "Número del año"
+      - name: year_start_date
+        description: "Fecha de inicio del año"
+      - name: year_end_date
+        description: "Fecha de fin del año"

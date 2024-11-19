@@ -1,18 +1,15 @@
 
-
-{{ config(materialized='view') }}
-
 with source as (
 
-    select * from {{ source('sql_server_dbo', 'orders') }}
+    select * from {{ ref('base_sql_server__orders')  }}
 
 ),
 
 renamed as (
 
     select
-        NULLIF(trim(order_id), '') as order_id,
-        NULLIF(trim(shipping_service), '') as shipping_service,
+        order_id as order_id,
+        trim(shipping_service) as shipping_service,
         shipping_cost,
         address_id,
         convert_timezone('UTC', created_at) as created_at,
@@ -23,7 +20,6 @@ renamed as (
         order_total,
         convert_timezone('UTC', delivered_at) as delivered_at,
         NULLIF(trim(tracking_id), '') as tracking_id,
-        status,
         _fivetran_deleted as valid_data,
         convert_timezone('UTC',_fivetran_synced) as date_load_UTC
     from source

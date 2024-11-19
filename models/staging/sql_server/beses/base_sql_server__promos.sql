@@ -18,6 +18,17 @@ renamed as (
 
     from source
 
+    union all
+
+    SELECT {{ dbt_utils.generate_surrogate_key(["''"]) }},
+    'no promo',
+    '0',
+    'active',
+    null,
+    '2024-10-25T16:00:37.597Z' 
+
+    
+
 )
 
 select * from renamed
