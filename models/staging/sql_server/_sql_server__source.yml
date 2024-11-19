@@ -112,6 +112,7 @@ sources:
         columns:
           - name: created_at
             tests:
+              - not_null
               - dbt_utils.expression_is_true:
                   expression: "_fivetran_synced > (created_at or delivered_at)"
 
@@ -124,12 +125,20 @@ sources:
               - not_null
 
           - name: order_id
+            tests:
+              - relationships:
+                  field: order_id
+                  to: ref('orders')
 
           - name: page_url
             tests:
               - not_null
 
           - name: product_id
+            tests:
+              - relationships:
+                  field: product_id
+                  to: ref('promos')
 
           - name: session_id
             tests:
@@ -139,6 +148,9 @@ sources:
             tests:
               - not_null
               - unique
+              - relationships:
+                  field: user_id
+                  to: ref('users')
           - name: _fivetran_deleted
           - name: _fivetran_synced
             tests:
@@ -156,6 +168,9 @@ sources:
           - name: product_id
             tests:
               - not_null
+              - relationships:
+                  to: ref('products')
+                  field: prduct_id
 
           - name: quantity
             tests:
@@ -173,6 +188,10 @@ sources:
               
 
           - name: product_id
+            tests:
+              - not_null
+              - unique
+              
           - name: name
           - name: price
           - name: _fivetran_deleted
@@ -235,6 +254,14 @@ sources:
               
           - name: total_orders
           - name: updated_at
+            tests:
+              - not_null
+              - dbt_utils.expression_is_true:
+                  expression: "_fivetran_synced > created_at"
           - name: user_id
+            tests:
+              - not_null
+              - unique
+              
           - name: _fivetran_deleted
           - name: _fivetran_synced
