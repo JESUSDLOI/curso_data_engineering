@@ -9,12 +9,8 @@ renamed as (
 
     select
         {{ dbt_utils.generate_surrogate_key(['shipping_service']) }} as shipping_service_id,
-        {{ dbt_utils.generate_surrogate_key(['shipping_service', 'shipping_cost']) }} as shipping_id,
-        shipping_cost,
-        estimated_delivery_at,
-        delivered_at,
-        tracking_id,
-        status
+        shipping_service
+        
     from source
 
 )

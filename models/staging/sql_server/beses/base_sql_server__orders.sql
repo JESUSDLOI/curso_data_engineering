@@ -12,7 +12,7 @@ renamed as (
 
     select
         order_id as order_id,
-        trim(shipping_service) as shipping_service,
+        replace(trim(shipping_service), '', 'service selection') as shipping_service,
         shipping_cost,
         address_id,
         convert_timezone('UTC', created_at) as created_at,
