@@ -1,0 +1,16 @@
+version: 2
+
+sources:
+
+  - name: EJEMPLO_SNAPSHOT # name of the source 
+    schema: ALUMNO29_SEEDS # this is the schema our raw data lives in
+    database: ALUMNO29_DEV_BRONZE_DB # this is the name of our database
+
+    tables:
+
+      - name: EJEMPLO_SNAPSHOT
+        columns:
+          - name: Nombre
+          - name: DNI
+          - name: email
+          - name: fecha_alta_sistema

@@ -1,0 +1,265 @@
+version: 2
+
+sources:
+  - name: sql_server_dbo # name of the source
+    schema: sql_server_dbo # this is the schema our raw data lives in
+    database: "{{ env_var('DBT_ENVIRONMENTS') }}_BRONZE_DB" # this is the name of our database
+
+    quoting:
+      database: false
+      schema: false
+      identifier: false
+
+    freshness:
+      warn_after: { count: 24, period: day }
+      error_after: { count: 48, period: day }
+
+    tables:
+      - name: orders
+        loaded_at_field: _fivetran_synced
+        columns:
+          - name: address_id
+            tests:
+              - not_null
+              - relationships:
+                  to: "source('sql_server_db','addresses')"
+                  field: address_id
+
+          - name: created_at
+            tests:
+              - not_null
+
+          - name: delivered_at
+            tests:
+              - dbt_utils.expression_is_true:
+                  expression: "delivered_at > created_at"
+
+          - name: estimated_delivered_at
+          - name: order_cost
+            tests:
+              - not_null
+              - dbt_utils.expression_is_true:
+                  expression: "0 >= order_cost"
+          - name: order_id
+            tests:
+              - not_null
+              - unique
+
+          - name: order_total
+            tests:
+              - not_null
+              - dbt_utils.expression_is_true:
+                  expression: "0 >= order_total"
+          - name: promo_id
+            tests:
+              - not_null
+          - name: shipping_cost
+            tests:
+              - not_null
+              - dbt_utils.expression_is_true:
+                  expression: "0 >= shipping_cost"
+          - name: shipping_service
+          - name: status
+
+          - name: tracking_id
+          - name: user_id
+          - name: _fivetran_deleted
+          - name: _fivetran_synced
+            tests:
+              - not_null
+              - dbt_utils.expression_is_true:
+                  expression: "_fivetran_synced > (created_at or delivered_at)"
+
+      - name: addresses
+        loaded_at_field: _fivetran_synced
+        columns:
+          - name: address
+            tests:
+              - unique
+              - not_null
+
+          - name: address_id
+            tests:
+              - unique
+              - not_null
+              - dbt_expectations.expect_column_value_lengths_to_equal:
+                  value: 36
+
+          - name: country
+            tests:
+              - dbt_utils.expression_is_true:
+                  expression: "{{ validate_country('country') }}"
+
+          - name: state
+            tests:
+              - dbt_expectations.expect_column_value_lengths_to_be_between:
+                  min_value: 4
+                  max_value: 20
+                  row_condition: '"STATE" is not null'
+
+          - name: zipcode
+            tests:
+              - dbt_utils.expression_is_true:
+                  expression: "{{ validate_us_zipcode('zipcode') }}"
+
+          - name: _fivetran_deleted
+          - name: _fivetran_synced
+            tests:
+              - not_null
+
+      - name: events
+        loaded_at_field: _fivetran_synced
+        columns:
+          - name: created_at
+            tests:
+              - not_null
+              - dbt_utils.expression_is_true:
+                  expression: "_fivetran_synced > (created_at or delivered_at)"
+
+          - name: event_id
+            tests:
+              - not_null
+
+          - name: event_type
+            tests:
+              - not_null
+
+          - name: order_id
+            tests:
+              - relationships:
+                  field: order_id
+                  to: ref('orders')
+
+          - name: page_url
+            tests:
+              - not_null
+
+          - name: product_id
+            tests:
+              - relationships:
+                  field: product_id
+                  to: ref('promos')
+
+          - name: session_id
+            tests:
+              - not_null
+          - name: user_id
+            tests:
+              - not_null
+              - relationships:
+                  field: user_id
+                  to: ref('users')
+          - name: _fivetran_deleted
+          - name: _fivetran_synced
+            tests:
+              - not_null
+              - dbt_utils.expression_is_true:
+                  expression: "_fivetran_synced > created_at"
+
+      - name: order_items
+        loaded_at_field: _fivetran_synced
+        columns:
+          - name: order_id
+            tests:
+              - not_null
+
+          - name: product_id
+            tests:
+              - not_null
+              - relationships:
+                  to: ref('products')
+                  field: prduct_id
+
+          - name: quantity
+            tests:
+              - not_null
+
+          - name: _fivetran_deleted
+          - name: _fivetran_synced
+
+      - name: products
+        loaded_at_field: _fivetran_synced
+        columns:
+          - name: inventory
+            tests:
+              - not_null
+              
+
+          - name: product_id
+            tests:
+              - not_null
+              - unique
+              
+          - name: name
+          - name: price
+          - name: _fivetran_deleted
+          - name: _fivetran_synced
+
+      - name: promos
+        loaded_at_field: _fivetran_synced
+        columns:
+          - name: promo_id
+            tests:
+              - not_null
+              - unique
+
+          - name: discount
+            tests:
+              - not_null
+
+          - name: status
+            tests:
+              - not_null
+              - accepted_values:
+                  values:
+                    - "inactive"
+                    - "active"
+          - name: _fivetran_deleted
+          - name: _fivetran_synced
+
+      - name: users
+        loaded_at_field: _fivetran_synced
+        columns:
+          - name: address_id
+            tests:
+              - not_null
+              - relationships:
+                  field: addresse_id
+                  to: "ref('sql_server', 'addresses')"
+                  
+          - name: created_at
+            tests:
+              - not_null
+              - dbt_utils.expression_is_true:
+                  expression: "_fivetran_synced > created_at"
+          - name: email
+            tests:
+              - unique
+              - not_null
+            
+          - name: first_name
+            tests:
+              - not_null
+                  
+          - name: last_name
+            tests:
+              - not_null
+
+            
+          - name: phone_number
+            tests:
+              - not_null
+              
+          - name: total_orders
+          - name: updated_at
+            tests:
+              - not_null
+              - dbt_utils.expression_is_true:
+                  expression: "_fivetran_synced > created_at"
+          - name: user_id
+            tests:
+              - not_null
+              - unique
+              
+          - name: _fivetran_deleted
+          - name: _fivetran_synced
