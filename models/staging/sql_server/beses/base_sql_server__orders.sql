@@ -23,7 +23,7 @@ renamed as (
         order_total as order_total_usd,
         convert_timezone('UTC', delivered_at) as delivered_at_UTC,
         NULLIF(trim(tracking_id), '') as tracking_id,
-        status,
+        {{ dbt_utils.generate_surrogate_key(['status']) }} as id_order_status,
         _fivetran_deleted as valid_data,
         convert_timezone('UTC',_fivetran_synced) as date_load_UTC
     from source
