@@ -19,6 +19,7 @@ renamed as (
         order_cost,
         user_id,
         order_total,
+        id_order_status,
         valid_data,
         date_load_UTC
 
