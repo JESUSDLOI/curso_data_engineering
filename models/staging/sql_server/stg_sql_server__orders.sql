@@ -14,7 +14,7 @@ renamed as (
         order_id,
         {{ dbt_utils.generate_surrogate_key(['shipping_service', 'shipping_cost_usd']) }} as shipping_id,
         address_id,
-        created_at_usd,
+        created_at_UTC,
         promo_id,
         order_cost_usd,
         user_id,
