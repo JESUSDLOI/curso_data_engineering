@@ -1,166 +1,300 @@
 version: 2
-
 models:
   - name: base_sql_server__addresses
-    description: "Modelo que contiene información sobre direcciones."
+    description: "Contiene las direcciones asociadas a las órdenes."
     columns:
       - name: address_id
-        data_type: varchar
         description: "Identificador único de la dirección."
-
+        data_type: varchar
+        tests:
+          - not_null
+          - unique
+          
       - name: zipcode
+        description: "Código postal de la dirección."
         data_type: number
-        description: "Código postal asociado a la dirección."
-
+        tests:
+          - not_null
+          
       - name: country
-        data_type: varchar
         description: "País de la dirección."
-
+        data_type: varchar
+        tests:
+          - not_null
+          
       - name: address
+        description: "Dirección física de la ubicación."
         data_type: varchar
-        description: "Línea de la dirección (calle, número, etc.)."
-
+        tests:
+          - not_null
+          
       - name: state
+        description: "Estado o provincia de la dirección."
         data_type: varchar
-        description: "Estado o región asociada a la dirección."
-
+        tests:
+          - not_null
+          
       - name: valid_data
+        description: "Indica si los datos de la dirección son válidos."
         data_type: boolean
-        description: "Indica si la dirección es válida (true/false)."
-
+        tests:
+          - not_null
+          
       - name: date_load_utc
-        data_type: timestamp_tz
         description: "Fecha y hora de carga de los datos en formato UTC."
+        data_type: timestamp_tz
+        tests:
+          - not_null
 
   - name: base_sql_server__events
-    description: "Modelo que contiene eventos relacionados con el comportamiento de los usuarios."
+    description: "Contiene los eventos generados por los usuarios en la plataforma."
+
     columns:
       - name: event_id
-        data_type: varchar
         description: "Identificador único del evento."
-
+        data_type: varchar
+        tests:
+          - not_null
+          - unique
+          
       - name: page_url
-        data_type: varchar
         description: "URL de la página donde ocurrió el evento."
-
+        data_type: varchar
+        tests:
+          - not_null
+          
       - name: event_type
+        description: "Tipo de evento (por ejemplo, clic, compra)."
         data_type: varchar
-        description: "Tipo de evento (ej. 'click', 'view', 'purchase')."
-
+        tests:
+          - not_null
+          
       - name: user_id
+        description: "Identificador único del usuario que realizó el evento."
         data_type: varchar
-        description: "Identificador único del usuario que generó el evento."
-
+        tests:
+          - not_null
+          
       - name: product_id
+        description: "Identificador único del producto relacionado con el evento."
         data_type: varchar
-        description: "Identificador del producto relacionado con el evento."
-
+        tests:
+          - not_null
+          
       - name: session_id
-        data_type: varchar
         description: "Identificador de la sesión del usuario."
-
-      - name: created_at
-        data_type: timestamp_tz
-        description: "Fecha y hora en que el evento fue creado, en formato UTC."
-
-      - name: order_id
         data_type: varchar
-        description: "Identificador del pedido asociado al evento (si aplica)."
-
-      - name: valid_data
-        data_type: boolean
-        description: "Indica si los datos del evento son válidos (true/false)."
-
-      - name: date_load_utc
+        tests:
+          - not_null
+          
+      - name: created_at
+        description: "Fecha y hora cuando se creó el evento."
         data_type: timestamp_tz
-        description: "Fecha y hora de carga de los datos del evento en formato UTC."
+        tests:
+          - not_null
+          
+      - name: order_id
+        description: "Identificador de la orden relacionada con el evento."
+        data_type: varchar
+        tests:
+          - not_null
+          - relationships:
+              field: order_id
+              to: ref('base_sql_server__orders')
+          
+      - name: valid_data
+        description: "Indica si los datos del evento son válidos."
+        data_type: boolean
+        tests:
+          - not_null
+          
+      - name: date_load_utc
+        description: "Fecha y hora de carga de los datos en formato UTC."
+        data_type: timestamp_tz
+        tests:
+          - not_null
+
+  - name: base_sql_server__order_items
+    description: "Contiene los artículos de las órdenes realizadas."
+
+    columns:
+      - name: order_id
+        description: "Identificador único de la orden."
+        data_type: varchar
+        tests:
+          - not_null
+          - relationships:
+              field: order_id
+              to: ref('base_sql_server__orders')
+          
+      - name: product_id
+        description: "Identificador del producto asociado al artículo."
+        data_type: varchar
+        tests:
+          - not_null
+          - relationships:
+              field: product_id
+              to: ref('base_sql_server__products')
+          
+      - name: quantity
+        description: "Cantidad de productos en la orden."
+        data_type: number
+        tests:
+          - not_null
+          - accepted_values:
+              values: "^[1-9][0-9]*$"  # Solo valores positivos mayores a 0
+          
+      - name: valid_data
+        description: "Indica si los datos del artículo son válidos."
+        data_type: boolean
+        tests:
+          - not_null
+          
+      - name: date_load_utc
+        description: "Fecha y hora de carga de los datos en formato UTC."
+        data_type: timestamp_tz
+        tests:
+          - not_null
 
   - name: base_sql_server__orders
-    description: "Modelo que contiene información sobre pedidos realizados."
+    description: "Contiene las órdenes realizadas por los usuarios."
+
     columns:
       - name: order_id
+        description: "Identificador único de la orden."
         data_type: varchar
-        description: "Identificador único del pedido."
-
+        tests:
+          - not_null
+          - unique
+          
       - name: shipping_service
+        description: "Servicio de envío utilizado para la orden."
         data_type: varchar
-        description: "Servicio de envío elegido para el pedido."
-
+        tests:
+          - not_null
+          
       - name: shipping_cost
+        description: "Costo de envío asociado a la orden."
         data_type: float
-        description: "Costo del envío del pedido."
-
+        tests:
+          - not_null
+          
       - name: address_id
+        description: "Identificador de la dirección asociada con la orden."
         data_type: varchar
-        description: "Identificador de la dirección de envío asociada al pedido."
-
+        tests:
+          - not_null
+          - relationships:
+              field: address_id
+              to: ref('base_sql_server__addresses')
+          
       - name: created_at
+        description: "Fecha y hora de creación de la orden."
         data_type: timestamp_tz
-        description: "Fecha y hora en que el pedido fue creado, en formato UTC."
-
+        tests:
+          - not_null
+          
       - name: promo_id
+        description: "Identificador de la promoción aplicada en la orden."
         data_type: varchar
-        description: "Identificador de la promoción aplicada al pedido (si aplica)."
-
+        tests:
+          - not_null
+          - relationships:
+              field: promo_id
+              to: ref('base_sql_server__promos')
+          
       - name: estimated_delivery_at
+        description: "Fecha estimada de entrega."
         data_type: timestamp_tz
-        description: "Fecha estimada de entrega del pedido."
-
+        tests:
+          - not_null
+          
       - name: order_cost
+        description: "Costo de la orden sin impuestos y envío."
         data_type: float
-        description: "Costo total del pedido antes de impuestos y costos adicionales."
-
+        tests:
+          - not_null
+          
       - name: user_id
+        description: "Identificador único del usuario que realizó la orden."
         data_type: varchar
-        description: "Identificador único del usuario que realizó el pedido."
-
+        tests:
+          - not_null
+          - relationships:
+              field: user_id
+              to: ref('base_sql_server__users')
+          
       - name: order_total
+        description: "Total de la orden, incluyendo impuestos y envío."
         data_type: float
-        description: "Monto total del pedido, incluyendo impuestos, envío y descuentos."
-
+        tests:
+          - not_null
+          
       - name: delivered_at
+        description: "Fecha y hora de la entrega de la orden."
         data_type: timestamp_tz
-        description: "Fecha en la que el pedido fue entregado."
-
+        tests:
+          - not_null
+          
       - name: tracking_id
+        description: "Identificador del seguimiento de la orden."
         data_type: varchar
-        description: "Número de seguimiento del paquete del pedido."
-
+        tests:
+          - not_null
+          
       - name: status
+        description: "Estado de la orden."
         data_type: varchar
-        description: "Estado del pedido (ej. 'pendiente', 'enviado', 'entregado')."
-
+        tests:
+          - not_null
+          
       - name: valid_data
+        description: "Indica si los datos de la orden son válidos."
         data_type: boolean
-        description: "Indica si los datos del pedido son válidos (true/false)."
-
+        tests:
+          - not_null
+          
       - name: date_load_utc
+        description: "Fecha y hora de carga de los datos en formato UTC."
         data_type: timestamp_tz
-        description: "Fecha y hora de carga de los datos del pedido en formato UTC."
+        tests:
+          - not_null
 
   - name: base_sql_server__promos
-    description: "Modelo que contiene información sobre promociones aplicadas a los pedidos."
+    description: "Contiene las promociones activas o pasadas con descuentos."
     columns:
       - name: promo_id
-        data_type: varchar
         description: "Identificador único de la promoción."
-
+        data_type: varchar
+        tests:
+          - not_null
+          
       - name: promo_name
-        data_type: varchar
         description: "Nombre de la promoción."
-
-      - name: discount
-        data_type: number
-        description: "Porcentaje o monto del descuento aplicado en la promoción."
-
-      - name: status
         data_type: varchar
-        description: "Estado de la promoción (ej. 'activa', 'finalizada')."
-
+        tests:
+          - not_null
+          
+      - name: discount
+        description: "Descuento asociado a la promoción."
+        data_type: number
+        tests:
+          - not_null
+          
+      - name: status
+        description: "Estado de la promoción."
+        data_type: varchar
+        tests:
+          - not_null
+          
       - name: valid_data
+        description: "Indica si los datos de la promoción son válidos."
         data_type: boolean
-        description: "Indica si los datos de la promoción son válidos (true/false)."
-
+        tests:
+          - not_null
+          
       - name: date_load_utc
+        description: "Fecha y hora de carga de los datos en formato UTC."
         data_type: timestamp_tz
-        description: "Fecha y hora de carga de los datos de la promoción en formato UTC."
+        tests:
+          - not_null

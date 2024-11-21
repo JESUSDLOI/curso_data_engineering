@@ -16,12 +16,30 @@ sources:
       error_after: {count: 48, period: day}
 
     tables:
-
       - name: budget
-        loaded_at_field: _fivetran_synced
+        description: "Tabla que contiene los detalles de los presupuestos de productos."
         columns:
           - name: _row
+            description: "Identificador único de la fila en la fuente. Generalmente utilizado como un campo interno de la base de datos."
+            tests:
+              - not_null
+              - unique
           - name: product_id
+            description: "ID del producto asociado con el presupuesto."
+            tests:
+              - not_null
+              - unique
           - name: quantity
+            description: "Cantidad de productos para el presupuesto. Este campo representa el número de unidades."
+            tests:
+              - not_null
+              - accepted_values:
+                  values: "^[1-9][0-9]*$"  # Asegura que quantity sea un número mayor a 0
           - name: month
+            description: "Mes asociado con el presupuesto. Este campo tiene formato de fecha (YYYY-MM)."
+            tests:
+              - not_null
           - name: _fivetran_synced
+            description: "Fecha y hora de la última sincronización de los datos desde Fivetran."
+            tests:
+              - not_null
