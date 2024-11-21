@@ -12,19 +12,19 @@ renamed as (
     select
 
         order_id,
-        {{ dbt_utils.generate_surrogate_key(['shipping_service', 'shipping_cost']) }} as shipping_id,
+        {{ dbt_utils.generate_surrogate_key(['shipping_service', 'shipping_cost_usd']) }} as shipping_id,
         address_id,
-        created_at,
-        estimated_delivery_at,
-        delivered_at,
+        created_at_utc,
+        estimated_delivery_at_utc,
+        delivered_at_utc,
         tracking_id,
         order_status,
         promo_id,
-        order_cost,
+        order_cost_usd,
         user_id,
-        order_total,
+        order_total_usd,
         valid_data,
-        date_load_UTC
+        date_load_utc
 
     from base_orders as a 
 

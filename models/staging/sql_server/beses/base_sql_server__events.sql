@@ -22,7 +22,7 @@ SELECT
     CAST(_fivetran_deleted AS BOOLEAN) AS valid_data,                          -- indicador lógico (null/valor)
     CAST(CONVERT_TIMEZONE('UTC', _fivetran_synced) AS TIMESTAMP) AS date_load_utc -- fecha de carga en utc
 FROM
-    source;
+    source
 
 
 )

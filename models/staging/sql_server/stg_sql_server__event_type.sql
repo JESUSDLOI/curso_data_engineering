@@ -14,7 +14,7 @@ SELECT
         valid_data,    -- validación de datos
         date_load_utc  -- fecha de carga en utc
 FROM
-    source;
+    source
 
 
 )

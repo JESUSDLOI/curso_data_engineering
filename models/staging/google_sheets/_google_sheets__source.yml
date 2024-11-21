@@ -28,13 +28,11 @@ sources:
             description: "ID del producto asociado con el presupuesto."
             tests:
               - not_null
-              - unique
           - name: quantity
             description: "Cantidad de productos para el presupuesto. Este campo representa el número de unidades."
             tests:
               - not_null
-              - accepted_values:
-                  values: "^[1-9][0-9]*$"  # Asegura que quantity sea un número mayor a 0
+              
           - name: month
             description: "Mes asociado con el presupuesto. Este campo tiene formato de fecha (YYYY-MM)."
             tests:

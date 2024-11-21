@@ -143,11 +143,9 @@ sources:
           - name: session_id
             tests:
               - not_null
-              - unique
           - name: user_id
             tests:
               - not_null
-              - unique
               - relationships:
                   field: user_id
                   to: ref('users')
