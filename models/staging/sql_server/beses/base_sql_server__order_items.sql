@@ -8,14 +8,15 @@ with source as (
 
 renamed as (
 
-    select
-        order_id,
-        product_id,
-        quantity,
-        _fivetran_deleted as valid_data,
-        convert_timezone('UTC',_fivetran_synced) as date_load_UTC
+SELECT
+    CAST(order_id AS VARCHAR(255)) AS order_id,                              -- id de la orden como texto limitado
+    CAST(product_id AS VARCHAR(255)) AS product_id,                          -- id del producto como texto limitado
+    CAST(quantity AS INT) AS quantity,                                      -- cantidad como entero
+    CAST(_fivetran_deleted AS BOOLEAN) AS valid_data,                       -- indicador lógico (null/valor)
+    CAST(CONVERT_TIMEZONE('UTC', _fivetran_synced) AS TIMESTAMP) AS date_load_utc -- fecha de carga en utc
+FROM
+    source;
 
-    from source
 
 )
 

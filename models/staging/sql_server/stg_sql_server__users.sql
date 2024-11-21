@@ -9,19 +9,20 @@ with source as (
 
 renamed as (
 
-    select
-        trim(user_id) as user_id,
-        convert_timezone('UTC', updated_at) as updated_at,
-        trim(address_id) as address_id,
-        trim(last_name) as last_name,
-        convert_timezone('UTC', created_at) as created_at,
-        trim(phone_number) as phone_number,
-        trim(first_name) as first_name,
-        email,
-        _fivetran_deleted as valid_data,
-        convert_timezone('UTC',_fivetran_synced) as date_load_UTC
+SELECT
+    CAST(TRIM(user_id) AS VARCHAR(255)) AS user_id,                          -- id del usuario como texto limitado
+    CAST(CONVERT_TIMEZONE('UTC', updated_at) AS TIMESTAMP) AS updated_at_utc, -- fecha de actualización en UTC
+    CAST(TRIM(address_id) AS VARCHAR(255)) AS address_id,                    -- id de la dirección como texto limitado
+    CAST(TRIM(last_name) AS VARCHAR(255)) AS last_name,                     -- apellido como texto limitado
+    CAST(CONVERT_TIMEZONE('UTC', created_at) AS TIMESTAMP) AS created_at_utc,   -- fecha de creación en UTC
+    CAST(TRIM(phone_number) AS VARCHAR(255)) AS phone_number,                -- número de teléfono como texto limitado
+    CAST(TRIM(first_name) AS VARCHAR(255)) AS first_name,                   -- primer nombre como texto limitado
+    CAST(email AS VARCHAR(255)) AS email,                                   -- correo electrónico como texto largo
+    CAST(_fivetran_deleted AS BOOLEAN) AS valid_data,                       -- indicador lógico (null/valor)
+    CAST(CONVERT_TIMEZONE('UTC', _fivetran_synced) AS TIMESTAMP) AS date_load_utc -- fecha de carga en UTC
+FROM
+    source;
 
-    from source
 
 )
 

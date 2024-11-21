@@ -8,13 +8,13 @@ with source as (
 renamed as (
 
     select
-        {{ dbt_utils.generate_surrogate_key(['shipping_service']) }} as shipping_service_id,
-        {{ dbt_utils.generate_surrogate_key(['shipping_service', 'shipping_cost']) }} as shipping_id,
-        shipping_cost,
-        estimated_delivery_at,
-        delivered_at,
-        tracking_id,
-        status
+        
+        distinct({{ dbt_utils.generate_surrogate_key(['shipping_service', 'shipping_cost']) }}) as shipping_id,
+        shipping_cost_USD,
+        shipping_service_id,
+        valid_data,
+        date_load_UTC
+
     from source
 
 )

@@ -1,4 +1,4 @@
-
+{{ config(materialized='table') }}
 
     
 with base_dates as (

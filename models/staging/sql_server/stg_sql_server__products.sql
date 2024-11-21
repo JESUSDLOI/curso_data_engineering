@@ -9,12 +9,12 @@ with source as (
 renamed as (
 
     select
-        trim(product_id) as product_id,
-        price,
-        trim(name) as name,
+        product_id,
+        price_USD,
+        name,
         inventory,
-        _fivetran_deleted as valid_data,
-        convert_timezone('UTC', _fivetran_synced) as date_load_UTC
+        valid_data,
+        date_load_UTC
 
     from source
 

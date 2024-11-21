@@ -9,10 +9,10 @@ with source as (
 renamed as (
 
     select
-        {{ dbt_utils.generate_surrogate_key(['promo_id']) }} as promo_id,
+        promo_id,
         promo_name,
-        discount,
-        {{ dbt_utils.generate_surrogate_key(['status']) }} as status,
+        discount_USD,
+        promo_status_id,
         valid_data,
         date_load_UTC
 

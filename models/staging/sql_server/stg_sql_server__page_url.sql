@@ -2,22 +2,20 @@
 
 with source as (
 
-    select * from {{ ref('base_sql_server__promos') }}
+    select * from {{ ref('base_sql_server__events') }}
 
 ),
 
 renamed as (
 
     select
-
-        distinct(promo_status_id) as promo_status_id,
-        promo_status,
+        
+        distinct(page_url_id),
+        page_url,
         valid_data,
         date_load_UTC
 
     from source
-
-    
 
 )
 
