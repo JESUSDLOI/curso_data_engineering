@@ -4,6 +4,6 @@ use schema secretos;
 
 insert into prueba
 values
-    (a,1,current_timestamp()),
-    (b,2,current_timestamp()),
-    (c,3,current_timestamp());
+    ('a',1,current_timestamp()),
+    ('b',2,current_timestamp()),
+    ('c',3,current_timestamp());
