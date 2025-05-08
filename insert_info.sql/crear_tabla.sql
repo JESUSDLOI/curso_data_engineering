@@ -1,7 +1,7 @@
 use database JESUS_DE_LA_OLIVA;
 use schema secretos;
 
-create table prueba
+create or alter table prueba
 (
     columna_1 varchar,
     columna_2 number,
