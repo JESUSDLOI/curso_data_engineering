@@ -3,8 +3,8 @@ use schema secretos;
 
 create table prueba
 (
-    columna_1 varchar
-    columna_2 number
+    columna_1 varchar,
+    columna_2 number,
     columna_3 timestamp_ntz
 
 );
