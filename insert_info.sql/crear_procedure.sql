@@ -6,8 +6,8 @@ CREATE OR REPLACE PROCEDURE INTEGRACION_GIT(
     )
 RETURNS TABLE (
     "Filas insertadas" NUMBER,
-    "Filas actualizadas" NUMBER,
-    "Filas eliminadas" NUMBER
+    "Filas actualizadas" NUMBER
+
 )
 LANGUAGE SQL
 EXECUTE AS CALLER
@@ -182,7 +182,8 @@ BEGIN
     result := (
         SELECT 
             a."number of rows inserted" AS "Filas insertadas",
-            a."number of rows updated" AS "Filas actualizadas"             
+            a."number of rows updated" AS "Filas actualizadas"
+               
         FROM TABLE(RESULT_SCAN(:merge_query_id)) a
         FULL OUTER JOIN TABLE(RESULT_SCAN(:delete_query_id)) b
         ON 1 = 1
