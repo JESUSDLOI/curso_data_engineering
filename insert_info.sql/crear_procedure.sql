@@ -182,8 +182,7 @@ BEGIN
     result := (
         SELECT 
             a."number of rows inserted" AS "Filas insertadas",
-            a."number of rows updated" AS "Filas actualizadas",
-            b."number of rows deleted" AS "Filas eliminadas"                
+            a."number of rows updated" AS "Filas actualizadas"             
         FROM TABLE(RESULT_SCAN(:merge_query_id)) a
         FULL OUTER JOIN TABLE(RESULT_SCAN(:delete_query_id)) b
         ON 1 = 1
