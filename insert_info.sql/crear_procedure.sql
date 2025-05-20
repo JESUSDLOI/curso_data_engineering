@@ -23,7 +23,7 @@ DECLARE
     result RESULTSET;
 
     -- Excepciones
-    entorno_invalido EXCEPTION (-20001, 'El parámetro de entorno introducido es inválido. Debe ser ''DEV'', ''PRE'', o ''PRO''.');
+    entorno_invalido EXCEPTION (-20001, 'El parámetro de entorno introducido es inválido. Debe ser ''JESUS''.');
     full_refresh_invalido EXCEPTION (-20002, 'El parámetro de full-refresh introducido es inválido. Debe ser ''FULL-REFRESH''.');
     error_merge EXCEPTION (-20003, 'Error al hacer MERGE en el full-refresh. No se está detectando ningún delta.');
 BEGIN
@@ -35,7 +35,7 @@ BEGIN
     EXECUTE IMMEDIATE 'ALTER SESSION SET TIMEZONE = ''UTC''';
 
     -- Valida el parámetro de entorno introducido
-    IF (env NOT IN ('DEV', 'PRE', 'PRO')) THEN
+    IF (env NOT IN ('JESUS')) THEN
         RAISE entorno_invalido;
     END IF;
 
